@@ -1,1 +1,2 @@
-baker1.Rproj
+^.*\.Rproj$
+^\.Rproj\.user$
