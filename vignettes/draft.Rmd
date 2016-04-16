@@ -1,0 +1,24 @@
+---
+title: "A Replication of `Benchmarks as Limits to Arbitrage'"
+author: "David Kane"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Introduction
+
+"Benchmarks as Limits to Arbitrage: Understanding the Low Volatility Anomaly" by Baker, Bradley and Wurgler (2011)^[http://people.stern.nyu.edu/jwurgler/papers/faj-benchmarks.pdf] is an important paper in the literature on low volatility investing. I replicate the main results of this paper using data for large capitalization US stocks from 1998 through 2007.
+
+# Literature Review
+
+# Data
+
+# Replication
+
+# Extension
+
+# Conclusion

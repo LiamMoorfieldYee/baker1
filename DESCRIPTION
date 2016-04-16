@@ -7,3 +7,6 @@ Description: This package replicates some of the main results from Baker et al (
 Depends: R (>= 3.2.4)
 License: GPL-3
 LazyData: true
+Imports: dplyr, ggplot2, ws.data,
+Suggests: knitr
+VignetteBuilder: knitr
