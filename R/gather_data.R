@@ -3,6 +3,9 @@
 #' gather_data() brings together all the daily return data we need from the ws.data package.
 #'
 #' @return A data frame on stock-by-date information.
+#' 
+#' @import ws.data
+#' 
 #' @export
 
 gather_data <- function(){
