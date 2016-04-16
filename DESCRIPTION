@@ -11,7 +11,7 @@ LazyData: true
 Imports:
     dplyr,
     ggplot2,
-    ws.data,
+    ws.data
 Suggests:
     knitr
 VignetteBuilder: knitr

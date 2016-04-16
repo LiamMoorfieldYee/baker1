@@ -4,7 +4,7 @@
 #'
 #' @return A data frame on stock-by-date information.
 #' 
-#' @import ws.data
+#' @import dplyr ws.data
 #' 
 #' @export
 
