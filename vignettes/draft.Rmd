@@ -52,11 +52,21 @@ x <- x %>% group_by(symbol) %>%
 
 ## Maybe show some graphics? 
 
+
 ## We really only need this data for the last day of the month, so, we can 
 ## filter out the rest as here. Keep in mind that this is the last trade day of
 ## the month, not always the last day.
 
-monthly.sd <- x %>% group_by(month) %>% filter(min_rank(desc(date)) == 1)
+## We should probably take better care to do our universe trimming early in the
+## process, probably in gather_data. It is hacky to have filters like top.1500
+## floating around in this document.
+
+monthly.sd <- x %>% group_by(month) %>% 
+  filter(min_rank(desc(date)) == 1) %>% 
+  filter(top.1500) %>% 
+  mutate(sd.class = ntile(sd.252, n = 5))
+
+
 
 ## Need to examine this data. Deal with outliers and NA.
 
@@ -90,22 +100,63 @@ monthly.sd <- mutate(monthly.sd,
                                           lubridate::year(date + 10), sep = "-"))
 
 all <- left_join(select(monthly.sd, - month), monthly.ret, 
-                 by = c("symbol", c("month.plus.1" = "month")))
+                 by = c("symbol", c("month.plus.1" = "month"))) %>% ungroup()
 
 ## Is having a variable called "month" creating all sorts of problems? I can't
 ## seem to just -month select it. Hmmm
 
+## Might be nicer to change the values for sd.class to highlight which is the
+## high volatility portfolio.
+
 all <-  filter(all, ! is.na(sd.252))  %>% 
         group_by(month.plus.1) %>% 
-        mutate(sd.class = ntile(sd.252, n = 5)) %>% 
-        select(month.plus.1, sd.class, ret.0.1.m)
+        select(date, month.plus.1, sd.class, ret.0.1.m, top.1500) %>% 
+        ungroup() %>% ## Needed to do the arrange correctly for entire data.
+        arrange(date)
 
 summary(all)
 ```
 
-Create the plots from Baker et al.
+Create the the first volatility plot from Baker et al.
 
 ```{r}
+## Analysis by month. Not sure that I like the naming conventions of month and 
+## month.plus.1. Need to keep track of that, along with the ret.0.1.m
+## nomenclature.
+
+## Note that there are a lot of crazy outlier returns. I need to examine these 
+## and deal with them in a sensible fashion. For now, I am just going to get rid
+## of them and worry about it later. Just avoiding the non top.1500 seems to 
+## almost all the necessary work. But still, there is really no excuse for not 
+## looking at the return data much more closely. What about those outliers we 
+## saw before?
+
+all <- filter(all, top.1500) 
+ 
+## BE VERY CAREFUL about the na.rm = TRUE in calculating mean return.
+
+## I would rather use month.plus.1 in the next group_by, but, in the step after,
+## I will need date in order to ensure that the cumulative return is calculated
+## correctly. Is there an easy way to "keep around"" a variable when
+
+z <- all %>% group_by(sd.class, date) %>% 
+      summarize(ret.0.1.m = mean(ret.0.1.m, na.rm = TRUE)) %>% 
+      mutate(cum.ret = cumprod(1 + ret.0.1.m)) %>% 
+      ungroup() %>% 
+      arrange(sd.class, date)
+
+## Now we have a simple data set that show, for each (month-end) date and 
+## sd.class, what the monthly return and cumulative monthly return are. So, we
+## plot them.
+      
+z %>% filter(! is.na(cum.ret)) %>% 
+  ggplot(aes(x = date, y = cum.ret, color = as.character(sd.class))) + 
+    geom_line() + 
+    ggtitle("Returns by Volatility Quintile \n January 1999 - December 2007") + 
+    xlab("Date") + 
+    ylab("Value of $1 Invested in 1999")
+
+## Why am I getting the opposite answer from Baker?
 
 ```
 
