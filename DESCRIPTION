@@ -11,6 +11,8 @@ LazyData: true
 Imports:
     dplyr,
     ggplot2,
+    lubridate,
+    RcppRoll,
     ws.data
 Suggests:
     knitr

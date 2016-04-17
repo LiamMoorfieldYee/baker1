@@ -27,13 +27,25 @@ gather_data <- function(){
   
   ## Merge in a couple of steps for clarity.
   
-  daily <- tbl_df(daily.1998)
-  daily <- mutate(daily, year = year(v.date))
+  x <- bind_rows(daily.1998, daily.1999, daily.2000, daily.2001,
+                 daily.2002, daily.2003, daily.2004, daily.2005,
+                 daily.2006, daily.2007)
   
-  x <- left_join(daily, select(yearly, -symbol), 
+
+  x <- rename(x, date = v.date) 
+  
+  ## Need year for the merge with yearly data frame and month (like Jan-2005) to
+  ## calculate monthly returns.
+  
+  x <- mutate(x, year = lubridate::year(date),
+                 month = paste(lubridate::month(date, TRUE, TRUE), year, sep = "-"))
+  
+  x <- left_join(x, select(yearly, -symbol), 
                  by = c("year", "id"))
   
-  x <- left_join(x, select(secref, -symbol), by = "id")  
+  x <- left_join(x, select(secref, -symbol), by = "id")
   
+  x <- select(x, symbol, name, date, tret, top.1500, month) %>% arrange(date, symbol)
+
   return(x)
 }
