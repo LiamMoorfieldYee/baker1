@@ -2,7 +2,7 @@
 title: "A Replication of `Benchmarks as Limits to Arbitrage'"
 author: "David Kane"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: html_document
 vignette: >
   %\VignetteIndexEntry{Vignette Title}
   %\VignetteEngine{knitr::rmarkdown}
@@ -119,7 +119,7 @@ summary(all)
 
 Create the the first volatility plot from Baker et al.
 
-```{r, fig_width = 7, fig_height = 4}
+```{r}
 ## Analysis by month. Not sure that I like the naming conventions of month and 
 ## month.plus.1. Need to keep track of that, along with the ret.0.1.m
 ## nomenclature.
