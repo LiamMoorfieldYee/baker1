@@ -154,9 +154,10 @@ z %>% filter(! is.na(cum.ret)) %>%
     geom_line() + 
     ggtitle("Returns by Volatility Quintile \n January 1999 - December 2007") + 
     xlab("Date") + 
-    ylab("Value of $1 Invested in 1999")
+    ylab("Value of $1 Invested in 1999") 
 
-## Why am I getting the opposite answer from Baker?
+## Why am I getting the opposite answer from Baker? Why is it so hard to make
+## this plot look pretty
 
 ```
 
